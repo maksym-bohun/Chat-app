@@ -59,6 +59,9 @@ function SetAvatar(props) {
 
   useEffect(() => {
     loadImages();
+    if (!localStorage.getItem("chat-app-user")) {
+      navigate("/login");
+    }
   }, []);
 
   return (

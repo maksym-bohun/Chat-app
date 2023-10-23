@@ -62,8 +62,22 @@ exports.setAvatar = async (req, res, next) => {
     user.avatarImage = req.body.image;
     user.isAvatarImageSet = true;
     await user.save();
-    res.json({ status: "success", user, isSet: true });
+    return res.json({ status: "success", user, isSet: true });
   } catch (err) {
-    res.json({ status: "error", error: err, isSet: false });
+    return res.json({ status: "error", error: err, isSet: false });
+  }
+};
+
+exports.getAllUsers = async (req, res, next) => {
+  try {
+    const allUsers = await User.find({ _id: { $ne: req.params.id } }).select([
+      "email",
+      "username",
+      "avatarImage",
+      "_id",
+    ]);
+    return res.json({ status: "success", users: allUsers });
+  } catch (err) {
+    return res.json({ status: "error", error: err, isSet: false });
   }
 };

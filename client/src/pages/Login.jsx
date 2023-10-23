@@ -92,7 +92,7 @@ function Login(props) {
             onChange={(e) => handleChange(e)}
           />
 
-          <button type="submit">Create user</button>
+          <button type="submit">Login</button>
           <span>
             Don't have an account? <Link to="/register">Register</Link>
           </span>
