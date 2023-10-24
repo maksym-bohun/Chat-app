@@ -12,6 +12,8 @@ const Contacts = ({ contacts, currentUser, changeChat }) => {
       setCurrentUsername(currentUser.username);
       setCurrentUserImage(currentUser.avatarImage);
     }
+
+    console.log("CONTACTS", contacts);
   }, [currentUser]);
 
   const changeCurrentChat = (index, contact) => {

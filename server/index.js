@@ -3,6 +3,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const userRoutes = require("./routes/userRoutes");
 const messagesRoutes = require("./routes/messagesRoutes");
+const socket = require("socket.io");
 
 const app = express();
 require("dotenv").config();
@@ -32,4 +33,28 @@ const port = process.env.PORT || 4000;
 
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
+});
+
+const io = socket(server, {
+  cors: {
+    origin: "http://127.0.0.1:5173",
+    credentials: true,
+  },
+});
+
+global.onlineUsers = new Map();
+io.on("connection", (socket) => {
+  global.chatSocket = socket;
+  socket.on("add-user", (userId) => {
+    onlineUsers.set(userId, socket.id);
+  });
+
+  socket.on("send-message", (data) => {
+    console.log("✅", data);
+    const sendUserSocket = onlineUsers.get(data.to);
+    console.log(onlineUsers);
+    if (sendUserSocket) {
+      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+    }
+  });
 });

@@ -1,27 +1,27 @@
 import React, { useState } from "react";
+import { BsEmojiSmileFill } from "react-icons/bs";
+import { IoMdSend } from "react-icons/io";
 import styled from "styled-components";
 import Picker from "emoji-picker-react";
-import { IoMdSend } from "react-icons/io";
-import { BsEmojiSmileFill } from "react-icons/bs";
 
-function ChatInput({ handleSendMsg }) {
-  const [message, setMessage] = useState("");
+export default function ChatInput({ handleSendMsg }) {
+  const [msg, setMsg] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
-  const handleEmojiPickerHideShow = () => {
+  const handleEmojiPickerhideShow = () => {
     setShowEmojiPicker(!showEmojiPicker);
   };
 
-  const handleEmojiClick = (emojiObject, e) => {
-    setMessage((prevInput) => prevInput + emojiObject.emoji);
-    // setShowEmojiPicker(false);
+  const handleEmojiClick = (event, emojiObject) => {
+    let message = msg;
+    message += emojiObject.emoji;
+    setMsg(message);
   };
 
-  const sendChat = (e) => {
-    e.preventDefault();
-    if (message.length > 0) {
-      handleSendMsg(message);
-      setMessage("");
+  const sendChat = (event) => {
+    event.preventDefault();
+    if (msg.length > 0) {
+      handleSendMsg(msg);
+      setMsg("");
     }
   };
 
@@ -29,7 +29,7 @@ function ChatInput({ handleSendMsg }) {
     <Container>
       <div className="button-container">
         <div className="emoji">
-          <BsEmojiSmileFill onClick={handleEmojiPickerHideShow} />
+          <BsEmojiSmileFill onClick={handleEmojiPickerhideShow} />
           {showEmojiPicker && <Picker onEmojiClick={handleEmojiClick} />}
         </div>
       </div>
@@ -37,8 +37,8 @@ function ChatInput({ handleSendMsg }) {
         <input
           type="text"
           placeholder="type your message here"
-          onChange={(e) => setMessage(e.target.value)}
-          value={message}
+          onChange={(e) => setMsg(e.target.value)}
+          value={msg}
         />
         <button type="submit">
           <IoMdSend />
@@ -70,16 +70,12 @@ const Container = styled.div`
         color: #ffff00c8;
         cursor: pointer;
       }
-      .EmojiPickerReact {
+      .emoji-picker-react {
         position: absolute;
-        background-color: #fff;
-        top: -390px;
-        left: -20px;
-        max-height: 25rem;
+        top: -350px;
         background-color: #080420;
         box-shadow: 0 5px 10px #9a86f3;
         border-color: #9a86f3;
-        transform: scale(80%);
         .emoji-scroll-wrapper::-webkit-scrollbar {
           background-color: #080420;
           width: 5px;
@@ -98,13 +94,6 @@ const Container = styled.div`
         }
         .emoji-group:before {
           background-color: #080420;
-        }
-
-        .epr-emoji-category-label {
-          background-color: #080420;
-        }
-        .epr-preview {
-          display: none;
         }
       }
     }
@@ -153,5 +142,3 @@ const Container = styled.div`
     }
   }
 `;
-
-export default ChatInput;

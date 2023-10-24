@@ -3,13 +3,11 @@ import styled from "styled-components";
 import Robot from "../assets/Robot.gif";
 
 function Welcome({ user }) {
-  console.log("USER", user);
-
   return (
     <Container>
       <img src={Robot} alt="Robot" />{" "}
       <h1>
-        Welcome, <span>{user.username}</span>
+        Welcome, <span>{user?.username}</span>
       </h1>
       <h3>Please select a chat to start messaging</h3>
     </Container>
