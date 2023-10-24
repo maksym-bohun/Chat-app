@@ -37,6 +37,7 @@ function SetAvatar(props) {
   };
 
   const setProfilePicture = async () => {
+    console.log("SELECTED ", selectedAvatar);
     if (selectedAvatar === undefined) {
       toast.error("Please select an avatar!", toastOptions);
     } else {
@@ -48,7 +49,7 @@ function SetAvatar(props) {
       console.log("data", data);
       if (data.isSet) {
         user.isAvatarImageSet = true;
-        user.avatarImage = data.image;
+        user.avatarImage = data.user.avatarImage;
         localStorage.setItem("chat-app-user", JSON.stringify(user));
         navigate("/");
       } else {

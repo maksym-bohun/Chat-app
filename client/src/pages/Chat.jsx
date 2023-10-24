@@ -4,9 +4,13 @@ import axios from "axios";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import { allUsersRoute } from "../utils/APIRoutes";
 import Contacts from "../components/Contacts";
+import Welcome from "../components/Welcome";
+import ChatContainer from "../components/ChatContainer";
 
 const Chat = () => {
   const [currentUser, setCurrentUser] = useState(undefined);
+  const [currentChat, setCurrentChat] = useState(undefined);
+  const [isLoaded, setIsLoaded] = useState(false);
   const contacts = useLoaderData();
   const navigate = useNavigate();
 
@@ -15,8 +19,11 @@ const Chat = () => {
       navigate("/login");
     } else {
       setCurrentUser(JSON.parse(localStorage.getItem("chat-app-user")));
+
+      setIsLoaded(true);
     }
   }, []);
+  console.log(currentUser);
 
   useEffect(() => {
     if (currentUser && !currentUser.isAvatarImageSet) {
@@ -24,10 +31,24 @@ const Chat = () => {
     }
   }, [currentUser]);
 
+  const handleChatChange = (chat) => {
+    setCurrentChat(chat);
+  };
+
   return (
     <Container>
       <div className="container">
-        <Contacts contacts={contacts} currentUser={currentUser} />
+        <Contacts
+          contacts={contacts}
+          currentUser={currentUser}
+          changeChat={handleChatChange}
+        />
+        {isLoaded &&
+          (currentChat === undefined ? (
+            <Welcome user={currentUser} />
+          ) : (
+            <ChatContainer currentChat={currentChat} />
+          ))}
       </div>
     </Container>
   );
@@ -56,10 +77,14 @@ const Container = styled.div`
 `;
 
 export const contactsLoader = async ({ params }) => {
-  const { data } = await axios.get(
-    `${allUsersRoute}/${JSON.parse(localStorage.getItem("chat-app-user"))._id}`
-  );
-  return data.users;
+  if (localStorage.getItem("chat-app-user")) {
+    const { data } = await axios.get(
+      `${allUsersRoute}/${
+        JSON.parse(localStorage.getItem("chat-app-user"))._id
+      }`
+    );
+    return data.users;
+  } else return null;
 };
 
 export default Chat;

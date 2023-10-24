@@ -2,22 +2,23 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Logo from "../assets/Logo.svg";
 
-const Contacts = ({ contacts, currentUser }) => {
+const Contacts = ({ contacts, currentUser, changeChat }) => {
   const [currentUsername, setCurrentUsername] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
 
   useEffect(() => {
-    console.log(contacts, currentUser);
     if (currentUser) {
       setCurrentUsername(currentUser.username);
       setCurrentUserImage(currentUser.avatarImage);
     }
   }, [currentUser]);
 
-  const changeCurrentChat = (index, contact) => {};
+  const changeCurrentChat = (index, contact) => {
+    setCurrentSelected(index);
+    changeChat(contact);
+  };
 
-  console.log("-----", currentUserImage, currentUsername);
   return (
     <>
       {currentUserImage && currentUserImage && (
